@@ -1,5 +1,3 @@
-import { ADDRGETNETWORKPARAMS } from "dns";
-
 const fs = require("fs");
 const path = require("path");
 
