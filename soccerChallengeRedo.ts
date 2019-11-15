@@ -46,29 +46,42 @@ class Teams {
       }
     }
   }
-  sortTopTeams(): void {
-    if (this.teams.length <= 1) {
-      return;
+  private swap(leftIndex: number, rightIndex: number): void {
+    var temp = this.teams[leftIndex];
+    this.teams[leftIndex] = this.teams[rightIndex];
+    this.teams[rightIndex] = temp;
+  }
+
+  private partition(left: number, right: number) {
+    var pivot = this.teams[Math.floor((right + left) / 2)].getPoints(), //middle element
+      i = left, //left pointer
+      j = right; //right pointer
+    while (i <= j) {
+      while (this.teams[i].getPoints() > pivot) {
+        i++;
+      }
+      while (this.teams[j].getPoints() < pivot) {
+        j--;
+      }
+      if (i <= j) {
+        this.swap(i, j); //swap two elements
+        i++;
+        j--;
+      }
     }
-    let temp: Team;
-    for (let i = this.teams.length - 1; i > 0; i--) {
-      for (let j = 0; j < i; j++) {
-        if (this.teams[j + 1].getPoints() === this.teams[j].getPoints()) {
-          if (
-            this.teams[j]
-              .getName()[0]
-              .localeCompare(this.teams[j + 1].getName()[0]) > 0
-          ) {
-            temp = this.teams[j + 1];
-            this.teams[j + 1] = this.teams[j];
-            this.teams[j] = temp;
-          }
-        }
-        if (this.teams[j + 1].getPoints() > this.teams[j].getPoints()) {
-          temp = this.teams[j + 1];
-          this.teams[j + 1] = this.teams[j];
-          this.teams[j] = temp;
-        }
+    return i;
+  }
+  sortTopTeams(left: number = 0, right: number = this.teams.length - 1): void {
+    var index;
+    if (this.teams.length > 1) {
+      index = this.partition(left, right); //index returned from partition
+      if (left < index - 1) {
+        //more elements on the left side of the pivot
+        this.sortTopTeams(left, index - 1);
+      }
+      if (index < right) {
+        //more elements on the right side of the pivot
+        this.sortTopTeams(index, right);
       }
     }
   }
