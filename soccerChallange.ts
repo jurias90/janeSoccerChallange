@@ -1,4 +1,5 @@
 const fs = require("fs");
+
 const path = require("path");
 
 class Team {
@@ -23,8 +24,12 @@ class Team {
 class Teams {
   constructor() {
     this.teams = [];
+    this.isAllTeams = false;
   }
+
   public teams: Array<Team>;
+  private isAllTeams: boolean;
+
   addTeam(team: Team): void {
     if (this.teams.length === 0) {
       this.teams.push(team);
@@ -32,6 +37,7 @@ class Teams {
     }
     for (let i = 0; i < this.teams.length; i++) {
       if (this.teams[i].getName() === team.getName()) {
+        this.isAllTeams = true;
         return;
       }
     }
@@ -79,6 +85,10 @@ class Teams {
     }
     console.log("\n");
   }
+
+  getIsAllTeams(): Boolean {
+    return this.isAllTeams;
+  }
 }
 
 let listTeams = new Teams();
@@ -89,6 +99,7 @@ let team1: Team;
 let team2: Team;
 let team1Score: number;
 let team2Score: number;
+let teamsLength: number;
 
 fs.readFile(
   path.join(__dirname, "./sample-input.txt"),
@@ -114,8 +125,9 @@ fs.readFile(
           listTeams.addPointsToTeam(team1, 1);
           listTeams.addPointsToTeam(team2, 1);
         }
-        if (i % 3 === 2) {
-          console.log("Matchday ", (i + 1) / 3);
+        teamsLength = listTeams.teams.length / 2;
+        if (listTeams.getIsAllTeams() && i % teamsLength === teamsLength - 1) {
+          console.log("Matchday ", (i - (teamsLength - 1)) / teamsLength);
           listTeams.showTopTeams();
         }
       }
