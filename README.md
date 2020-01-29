@@ -12,4 +12,5 @@ No Permaters:
 ts-node ./src/soccerChallange.ts
 
 with Paramaters:
-ts-node ./src/soccerChallange.ts <filename>
+ts-node ./src/soccerChallange.ts
+i.e. (ts-node ./src/soccerChallange.ts "./src/sample-input.txt")
